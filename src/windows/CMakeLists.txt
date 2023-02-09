@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.22)
+
 aux_source_directory(. cppFiles)
 
 add_library(win32cxt SHARED ${cppFiles})
