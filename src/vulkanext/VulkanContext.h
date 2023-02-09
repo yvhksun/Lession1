@@ -55,6 +55,7 @@ private:
 
     void clearup();
     void CreateImageView();
+    void CreateRenderPass();
 
 protected:
     vk::PhysicalDevice pickDevice();
