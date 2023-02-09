@@ -173,6 +173,11 @@ void VulkanContext::CreateImageView()
 
 }
 
+void VulkanContext::CreateRenderPass()
+{
+    PipelineLayout layout;
+}
+
 vk::SwapchainKHR VulkanContext::CreateSwapchian()
 {
     if (!this->surface)
@@ -271,6 +276,10 @@ void VulkanContext::Init()
 //  8. 创建交换队列图像视图 - 有了交换链还不够，需要一组图形来保存渲染数据 
     this->CreateImageView();
 //  9. 创建渲染通道 - 渲染通道用于表示帧缓冲，他是子通道以及子通道关系的集合。深度模板附件、颜色附件、帧附件都是在此阶段被创建的 
+
+
+
+    this->CreateRenderPass();
 //  10. 创建描述符设置布局 - 描述符是一个特殊的不透明的着色器变量，着色器使用它以间接的方式访问缓冲区和图像资源。描述符集合是描述一个管线使用到的描述符集合。描述符布局则用于刻画其布局。 
 //  11. 创建管线布局 - 管道布局包含一个描述符集合布局的列表。推送常量在这个阶段被设置。 
 //  12. 创建帧缓冲 - 作为附件的图像依赖交换链用于呈现时返回的图像。这意味着我们必须为交换链中的所有图像创建一个帧缓冲区，并在绘制的时候使用对应的图像。其附件必须和渲染通道中使用的附件相匹配。 
@@ -288,7 +297,7 @@ void VulkanContext::loop()
 { 
    // cout<<"遍历循环"<<endl;
     win32.loop([this]()->void{
-        //this->loop();可能会死循环
+        
     });
 
     clearup();
