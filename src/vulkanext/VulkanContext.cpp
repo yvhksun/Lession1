@@ -31,6 +31,7 @@ void VulkanContext::CreateInstance()
     }
   
     InstanceCreateInfo info;
+
     info.setPEnabledLayerNames(strLayers);
     info.setPEnabledExtensionNames(strExts);
 

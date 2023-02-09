@@ -1,9 +1,12 @@
+
+
 cmake_minimum_required (VERSION 3.18)
+
 project("myapp")
 set(CMAKE_C_COMPILER "gcc")
 set(CMAKE_CXX_COMPILER "g++")
 
- add_definitions(-DVK_VERSION_1_0 -DGLFW_EXPOSE_NATIVE_WIN32 -DVK_USE_PLATFORM_WIN32_KHR) 
+ add_definitions(-DVK_VERSION_1_0 -DGLFW_EXPOSE_NATIVE_WIN32 -DVK_USE_PLATFORM_WIN32_KHR ) 
 
  #set(vk204dir "C:/VulkanSDK/1.3.204.0")
 
@@ -24,7 +27,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fexec-charset=GBK")
 add_subdirectory(src/vulkanext)
 add_subdirectory(src/windows)
 
-
+message(${CMAKE_SIZEOF_VOID_P} )
 
 
     #  message(${CMAKE_SIZEOF_VOID_P})
