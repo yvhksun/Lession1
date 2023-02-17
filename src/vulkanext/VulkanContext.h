@@ -56,6 +56,10 @@ private:
     void clearup();
     void CreateImageView();
     void CreateRenderPass();
+    std::vector<char> readFile(const std::string& path);
+    vk::ShaderModule CreateShaderModule(const std::string &path);
+
+    void CreatePipeline();
 
 protected:
     vk::PhysicalDevice pickDevice();

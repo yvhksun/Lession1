@@ -3,6 +3,8 @@
 #include"algorithm"
 #include<iterator>
 #include<math.h>
+#include<fstream>
+#include<filesystem>
 using namespace std;
 using namespace vk;
 VulkanContext::VulkanContext(/* args */Win32Context _app):win32(_app)
@@ -175,7 +177,68 @@ void VulkanContext::CreateImageView()
 
 void VulkanContext::CreateRenderPass()
 {
+
+
     PipelineLayout layout;
+}
+
+std::vector<char> VulkanContext::readFile(const std::string& path)
+{
+    ifstream file(path,std::ios::ate|std::ios::binary);
+    if (!file.is_open())
+    {
+        throw runtime_error("faild to  open file "+path);
+    }
+    
+    size_t fileSize = (size_t) file.tellg();
+    std::vector<char> buffer(fileSize);
+    file.seekg(0);
+    file.read(buffer.data(), fileSize);
+    file.close();
+
+    return buffer;
+}
+
+vk::ShaderModule VulkanContext::CreateShaderModule(const std::string &path)
+{
+    auto buffer = readFile(path);
+
+    ShaderModuleCreateInfo info ;
+    auto code = reinterpret_cast<const uint32_t*>(buffer.data());
+    info.setPCode(code);
+    return logicdevice.createShaderModule(info );
+}
+
+void VulkanContext::CreatePipeline()
+{
+    //着色器shader
+    PipelineShaderStageCreateInfo vertinfo;
+    vertinfo.setModule(CreateShaderModule("shader/frag.spv")).setPName("main").setStage(ShaderStageFlagBits::eFragment);
+    PipelineShaderStageCreateInfo fraginfo;
+    fraginfo.setModule(CreateShaderModule("shader/vert.spv")).setPName("main").setStage(ShaderStageFlagBits::eVertex);
+    PipelineShaderStageCreateInfo infos[] ={vertinfo,fraginfo};
+   
+    //动态状态dynamicstate
+    PipelineDynamicStateCreateInfo dynamicStateInfo;
+    vector<DynamicState> states = {DynamicState::eViewport,DynamicState::eBlendConstants};
+    dynamicStateInfo.setDynamicStates(states);
+    //顶点输入状态  -- 如无数据输入， 则不需要设置PipelineVertexInputStateCreateInfo
+    
+    //顶点装配状态 
+    PipelineInputAssemblyStateCreateInfo iasInfo;
+    iasInfo.setTopology(vk::PrimitiveTopology::eTriangleList).setPrimitiveRestartEnable(VK_FALSE);
+    //光栅化状态 Rasterization
+
+    //颜色混合状态 color blend
+    //视口状态 viewport 
+    //深度模板状态 depth stencil 
+    //多重采样状态 multi sample
+    //
+ 
+    PipelineVertexInputStateCreateInfo viinof;
+
+    PipelineInputAssemblyStateCreateInfo ainfo;
+    ainfo.setTopology(PrimitiveTopology::eTriangleStrip).setPrimitiveRestartEnable(false);
 }
 
 vk::SwapchainKHR VulkanContext::CreateSwapchian()
@@ -277,7 +340,7 @@ void VulkanContext::Init()
     this->CreateImageView();
 //  9. 创建渲染通道 - 渲染通道用于表示帧缓冲，他是子通道以及子通道关系的集合。深度模板附件、颜色附件、帧附件都是在此阶段被创建的 
         //9.1 创建
-
+    this->CreatePipeline();
 
     this->CreateRenderPass();
 //  10. 创建描述符设置布局 - 描述符是一个特殊的不透明的着色器变量，着色器使用它以间接的方式访问缓冲区和图像资源。描述符集合是描述一个管线使用到的描述符集合。描述符布局则用于刻画其布局。 

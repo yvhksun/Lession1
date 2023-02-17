@@ -24,9 +24,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fexec-charset=GBK")
 add_subdirectory(src/vulkanext)
 add_subdirectory(src/windows)
 
-
-
-
     #  message(${CMAKE_SIZEOF_VOID_P})
  
 # "把DEBUG版的可执行Target放到${CMAKE_BINARY_DIR}/bin目录中"
